@@ -1,0 +1,41 @@
+# create Vagrant box
+Im using Centos7 minimal
+
+1. Install vagrant, virtual bix if not yet
+vagrant version 1.9.0
+
+2. Install Centos via virtual bix, as usually
+	set root pass to vagrant
+3. prepare centos
+	set selinux to permissive
+	add vagrant user
+	create ~vagrant/.ssh/authorized_keys containing vagrant ssh pub key
+	disable requiretty in sudoers
+	grant sudo to root for vagrant user without password
+	clean stuff: rm -f /var/log/wtmp /var/log/btmp and history -c
+	poweroff
+4. create vagrant box
+	vagrant package --output centos7.box --base centos7
+5. add vagrant box (not really clear for me yet why so)
+	vagrant box add centos7 centos7.box
+
+5a. Virtual machine in VirtualBox can be removed now
+
+6. create vagrant project and configure vagrant file
+
+vagrant init centos7
+#will create Vagrantfile
+add to Vagrantfile(will disable shared folders between machine and host):
+config.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true 
+
+7. start vagrant
+vagrant up
+
+now can connect to vagrant box
+
+vagrant ssh
+
+other commands:
+vagrant status
+vagrant halt
+vagrant destroy
