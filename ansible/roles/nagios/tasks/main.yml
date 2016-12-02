@@ -1,0 +1,80 @@
+---
+# Install Nagios and related
+
+- name: Add Nagios group
+  group: name=nagcmd state=present gid=1337
+
+- name: Add Nagios user
+  user:
+      name=nagios
+      password='$6$saltsalt$LENhUpo6Ui46lgQoMdVh8jyDdoXhlq.TF1B8sKQgmQbr6FzsovxV5Y0VZgGgBQyZm08itfdbLggEjocuAgdoQ/'
+      state=present
+      groups=nagcmd
+      comment="Nagios sys user"
+
+- name: Apache user to Nagios group
+  user:
+      name=apache
+      state=present
+      groups=nagcmd
+
+- name: Create directory where to compile
+  file: path={{ nagtmp }} state=directory
+
+- name: upload & extract files
+  unarchive: src=roles/files/nagios-4.2.1.tar.gz dest={{ nagtmp }}
+
+- name: upload & extract nagios plugins
+  unarchive: src=roles/files/nagios-plugins-2.1.3.tar.gz dest={{ nagtmp }}
+
+- name: upload & extract NRPE
+  unarchive: src=roles/files/nrpe-2.15.tar.gz dest={{ nagtmp }}
+
+- name: Run ./configure for Nagios
+  shell: cd {{ nagtmp }}/{{ nagiossrc }} && ./configure --with-command-group=nagcmd creates={{ nagtmp }}/{{ nagiossrc }}/Makefile
+
+- name: Make all
+  shell: cd {{ nagtmp }}/{{ nagiossrc }} && make all creates={{ nagtmp }}/{{ nagiossrc }}/base/nagios
+
+- name: Make install
+  shell: cd {{ nagtmp }}/{{ nagiossrc }} && make install creates=/usr/local/nagios/bin/nagios
+
+- name: Make install-config
+  shell: cd {{ nagtmp }}/{{ nagiossrc }} && make install-config creates=/usr/local/nagios/etc/nagios.cfg 
+
+- name: Make install-commandmode
+  shell: cd {{ nagtmp }}/{{ nagiossrc }} && make install-commandmode creates=/usr/local/nagios/var/rw
+
+- name: Make install-devel
+  shell: cd {{ nagtmp }}/{{ nagiossrc }} && make install-devel creates=/usr/local/nagios/include/nagios/nagios.h
+
+- name: Make install-webconf
+  shell: cd {{ nagtmp }}/{{ nagiossrc }} && make install-webconf creates=/etc/httpd/conf.d/nagios.conf
+
+- name: Make install-init
+  shell: cd {{ nagtmp }}/{{ nagiossrc }} && make install-init creates=/etc/init.d/nagios
+  notify: restart apache
+
+- name: Set htpasswd for nagiosadmin
+  htpasswd: path=/usr/local/nagios/etc/htpasswd.users name=nagiosadmin password={{ nagiosadminpass }} state=present
+
+- name: Configure Nagios Plugins
+  shell: cd {{ nagtmp }}/{{ pluginssrc }} && ./configure --with-nagios-user=nagios --with-nagios-group=nagios --with-openssl=/usr/bin/openssl creates={{ nagtmp }}/{{ pluginssrc }}/Makefile
+
+- name: Make Plugins
+  shell: cd {{ nagtmp }}/{{ pluginssrc }} && make creates={{ nagtmp }}/{{ pluginssrc }}/plugins/check_ping
+
+- name: Make Install Plugins
+  shell: cd {{ nagtmp }}/{{ pluginssrc }} && make install creates=/usr/local/nagios/libexec/check_ping
+
+- name: Configure NRPE
+  shell: cd {{ nagtmp }}/{{ nrpesrc }} && ./configure --with-ssl=/usr/bin/openssl --with-ssl-lib=/usr/lib/x86_64-linux-gnu creates={{ nagtmp }}/{{ nrpesrc }}/Makefile
+
+- name: make NRPE
+  shell: cd {{ nagtmp }}/{{ nrpesrc }} && make all creates={{ nagtmp }}/{{ nrpesrc }}/src/check_nrpe
+
+- name: Copy check_nrpe
+  shell: cp {{ nagtmp }}/{{ nrpesrc }}/src/check_nrpe /usr/local/nagios/libexec/check_nrpe creates=/usr/local/nagios/libexec/check_nrpe
+
+- name: Ensure Nagios is started
+  service: name=nagios state=started enabled=yes

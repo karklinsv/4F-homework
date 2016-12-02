@@ -1,0 +1,36 @@
+---
+# Dependencies and utilities installation
+
+ - name: Download EPPEL repo for Centos7
+   get_url: url=http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm dest=/tmp/
+
+ - name: Install EPPEL repo for Centos7
+   yum: name=/tmp/epel-release-latest-7.noarch.rpm state=present
+
+ - name: Install dependencies
+   yum: state=present name={{ item }}
+   with_items:
+   - httpd.x86_64
+   - php.x86_64
+   - glibc.x86_64
+   - gcc.x86_64
+   - glibc-common.x86_64
+   - gd.x86_64
+   - gd-devel.x86_64
+   - nmap-ncat.x86_64
+   - vim
+   - net-tools.x86_64
+   - make.x86_64
+   - perl.x86_64
+   - perl-devel.x86_64
+   - wget.x86_64
+   - python-passlib
+   - openssl-devel
+   - fping
+   - openldap-devel
+   - postgresql-devel
+   - radiusclient-ng-devel
+   - samba-client
+   - libsmbclient
+   - unzip
+

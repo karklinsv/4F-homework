@@ -1,0 +1,10 @@
+---
+# Global variables
+nagtmp: /tmp/nagios/
+nagiossrc: nagios-4.2.1
+pluginssrc: nagios-plugins-2.1.3
+nrpesrc: nrpe-2.15
+
+# nagiosadmin password
+nagiosadminpass: horsie123
+

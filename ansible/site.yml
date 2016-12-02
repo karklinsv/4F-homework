@@ -1,0 +1,6 @@
+---
+- hosts: isthis4real
+
+  roles:
+  - deps
+  - nagios
