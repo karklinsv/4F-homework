@@ -1,4 +1,13 @@
 ## Home work
+Status:
+
+* Vagrant box created (CentOS 7), maybe some tuning still needed, but looks like working fine.
+* Monitoring deployment using ansible - ready (Nagios core 4.2.1)
+
+Next:
+
+* configure reverse proxy (possibly apache, as already installed)
+
 ## Deadline for submission: 13.12.2016
 
 ## Summary:
