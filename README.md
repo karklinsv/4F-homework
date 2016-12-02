@@ -7,6 +7,7 @@ Status:
 
 Next:
 
+* Ansible: looks like after deploy nginx or httpd or both are not restarted, also nagios service need restart imho
 * Configure rewrite for incomming connections on http to https.
 * Applciation run, and monitor metrics..
 * stress test
