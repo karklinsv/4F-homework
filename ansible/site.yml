@@ -1,6 +1,7 @@
 ---
-- hosts: isthis4real
+- hosts: nwa
 
   roles:
   - deps
   - nagios
+  - nginx

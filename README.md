@@ -3,10 +3,14 @@ Status:
 
 * Vagrant box created (CentOS 7), maybe some tuning still needed, but looks like working fine.
 * Monitoring deployment using ansible - ready (Nagios core 4.2.1)
+* Installed nginx for reverse proxy, sends traffic from 9119 to 80. Uses self-signed SSL cert. nginx deploy and conf is added to Ansible.
 
 Next:
 
-* configure reverse proxy (possibly apache, as already installed)
+* Configure rewrite for incomming connections on http to https.
+* Applciation run, and monitor metrics..
+* stress test
+* configure Vagrant file to use Asnible role
 
 ## Deadline for submission: 13.12.2016
 

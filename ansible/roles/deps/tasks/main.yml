@@ -33,4 +33,5 @@
    - samba-client
    - libsmbclient
    - unzip
-
+   - nginx
+   - libselinux-python

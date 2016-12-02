@@ -1,0 +1,23 @@
+---
+- name: copy nginx config
+  copy: 
+      src=roles/nginx/files/nginx.conf 
+      dest=/etc/nginx/nginx.conf
+      backup=yes
+
+- name: create ssl directory
+  file: path=/etc/nginx/ssl state=directory
+
+- name: copy self signed certs
+  copy:
+      src=roles/nginx/files/ssl/
+      dest=/etc/nginx/ssl/
+  notify: restart nginx
+
+- name: change httpd conf
+  copy: 
+      src=roles/nginx/files/httpd.conf
+      dest=/etc/httpd/conf/httpd.conf
+      backup=yes
+  notify: restart httpd
+
