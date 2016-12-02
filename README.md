@@ -12,6 +12,7 @@ Next:
 * stress test
 * configure Vagrant file to use Asnible role
 * configure Vagrant to forward different port than 2222, to ensure it is not buse already
+
 ## Deadline for submission: 13.12.2016
 
 ## Summary:
