@@ -1,0 +1,15 @@
+---
+## Install & run applciation
+- name: create app directory
+  file: path={{ appdir }} state=directory
+
+- name: upload app
+  copy: 
+      src=roles/application/files/listen1337.py
+      dest={{ appdir }}/listen1337.py
+      mode=0755
+      owner=nagios
+      group=nagios
+
+- name: start application
+  shell: daemonize {{ appdir }}/listen1337.py
