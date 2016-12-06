@@ -22,13 +22,16 @@
   file: path={{ nagtmp }} state=directory
 
 - name: upload & extract files
-  unarchive: src=roles/files/nagios-4.2.1.tar.gz dest={{ nagtmp }}
+  unarchive: src=roles/nagios/files/nagios-4.2.1.tar.gz dest={{ nagtmp }}
 
 - name: upload & extract nagios plugins
-  unarchive: src=roles/files/nagios-plugins-2.1.3.tar.gz dest={{ nagtmp }}
+  unarchive: src=roles/nagios/files/nagios-plugins-2.1.3.tar.gz dest={{ nagtmp }}
 
 - name: upload & extract NRPE
-  unarchive: src=roles/files/nrpe-2.15.tar.gz dest={{ nagtmp }}
+  unarchive: src=roles/nagios/files/nrpe-2.15.tar.gz dest={{ nagtmp }}
+
+- name: upload & extract nagios logfiles plugin
+  unarchive: src=roles/nagios/files/check_logfiles-3.7.6.3.tar.gz dest={{ nagtmp }}
 
 - name: Run ./configure for Nagios
   shell: cd {{ nagtmp }}/{{ nagiossrc }} && ./configure --with-command-group=nagcmd creates={{ nagtmp }}/{{ nagiossrc }}/Makefile
@@ -75,6 +78,34 @@
 
 - name: Copy check_nrpe
   shell: cp {{ nagtmp }}/{{ nrpesrc }}/src/check_nrpe /usr/local/nagios/libexec/check_nrpe creates=/usr/local/nagios/libexec/check_nrpe
+
+- name: Copy nrpe
+  shell: cp {{ nagtmp }}/{{ nrpesrc }}/src/nrpe /usr/local/nagios/bin/nrpe creates=/usr/local/nagios/bin/nrpe
+
+- name: Configure Check logfiles plugin
+  shell: cd {{ nagtmp }}/{{ checklogs }} && ./configure creates={{ nagtmp }}/{{ checklogs }}/Makefile
+
+- name: make check logfiles plugin
+  shell: cd {{ nagtmp }}/{{ checklogs }} && make creates={{ nagtmp }}/{{ checklogs }}/plugins-scripts/check_logfiles
+
+- name: make install Check logfiles plugin
+  shell: cd  {{ nagtmp }}/{{ checklogs }} && make install creates=/usr/local/nagios/libexec/check_logfiles
+
+- name: copy and clean configuration
+  copy:
+      src=roles/nagios/files/conf/
+      dest=/usr/local/nagios/etc/
+      owner=nagios
+      group=nagios 
+
+- name: Add nrpe server to autostart
+  shell: echo "/usr/local/nagios/bin/nrpe -c /usr/local/nagios/etc/nrpe.cfg -d" >> /etc/rc.local
+
+- name: Start nrpe server
+  shell: /usr/local/nagios/bin/nrpe -c /usr/local/nagios/etc/nrpe.cfg -d
+
+- name: Ensure that systemv service is started, so it can be used with systemctl afterwards
+  shell: /etc/init.d/nagios start
 
 - name: Ensure Nagios is started
   service: name=nagios state=started enabled=yes

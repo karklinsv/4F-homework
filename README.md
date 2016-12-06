@@ -3,16 +3,17 @@ Status:
 
 * Vagrant box created (CentOS 7), maybe some tuning still needed, but looks like working fine.
 * Monitoring deployment using ansible - ready (Nagios core 4.2.1)
-* Installed nginx for reverse proxy, sends traffic from 9119 to 80. Uses self-signed SSL cert. nginx deploy and conf is added to Ansible.
+* Installed nginx for reverse proxy, sends traffic from 9119 to 8080. Uses self-signed SSL cert. nginx deploy and conf is added to Ansible.
+* Application is installed (python module BaseHTTPServer) and listening on 1337 port.
+* Nagios is configured to check application logfiles on two metrics: error message count, and access messages.
+* Nginx reconfigured so http is redirected to https. Only issue I cannot get rid of is that "/" is required after non root path, for examle https://127.0.0.1:9119/nagios will not work, but https://127.0.0.1:9119/nagios/ will work correctly :S
 
 Next:
 
-* Ansible: looks like after deploy nginx or httpd or both are not restarted, also nagios service need restart imho
-* Configure rewrite for incomming connections on http to https.
-* Applciation run, and monitor metrics..
-* stress test
+* Ansible: looks like after deploy nginx or httpd or both are not restarted, also nagios service need restart imho - check if true still
+* stress test - current idea is to write simple bash script which will use curl and nc for connecting to port.
 * configure Vagrant file to use Asnible role
-* configure Vagrant to forward different port than 2222, to ensure it is not buse already
+* configure Vagrant to forward different port than 2222, to ensure it is not busy already
 
 ## Deadline for submission: 13.12.2016
 
