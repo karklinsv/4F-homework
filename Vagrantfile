@@ -13,7 +13,8 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "centos7"
-  config.vm.box_url = "file://../../vagrant_box/centos7.box"
+#  config.vm.box_url = "file://../../vagrant_box/centos7.box"
+  config.vm.box_url = "centos7.box"
   config.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true
   config.vm.hostname = "nwa"
 #  config.vm.network "private_network", ip: "172.28.128.153"
@@ -21,6 +22,17 @@ Vagrant.configure("2") do |config|
 #  config.vm.network "forwarded_port", guest: 9229, host: 9229   # nastios ssl
   config.vm.network "forwarded_port", guest: 1337, host: 1337   # app
   config.ssh.insert_key = false 
+## Ansible role
+  config.vm.provision "ansible" do |ansible|
+#  config.vm.provision "shell",
+#     inline: "/usr/bin/ansible-playbook ansible/site.yml"
+   ansible.config_file = "./ansible/ansible.cfg"
+   ansible.playbook = "./ansible/site.yml"
+   ansible.inventory_path = "./ansible/hosts"
+   ansible.limit = "all"
+  # ansible.verbose = "vvvv"
+  end  
+
 #config.vm.network = "hostonly, "192.168.0.133", :adapter => 2"
 #config.vm.network "private_network", ip: "192.168.1.133"
   # Disable automatic box update checking. If you disable this, then
