@@ -11,5 +11,5 @@
       owner=nagios
       group=nagios
 
-- name: start application
+- name: start application using daemonize app
   shell: daemonize {{ appdir }}/listen1337.py

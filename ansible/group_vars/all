@@ -1,11 +1,13 @@
 ---
-# Global variables
+# Nagios variables
 nagtmp: /tmp/nagios/
 nagiossrc: nagios-4.2.1
 pluginssrc: nagios-plugins-2.1.3
 nrpesrc: nrpe-2.15
 checklogs: check_logfiles-3.7.6.3
+
 # nagiosadmin password
 nagiosadminpass: horsie123
+
 # application vars
 appdir: /opt/application

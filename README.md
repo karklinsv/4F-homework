@@ -9,11 +9,7 @@ Status:
 * Nginx reconfigured so http is redirected to https. Only issue I cannot get rid of is that "/" is required after non root path, for examle https://127.0.0.1:9119/nagios will not work, but https://127.0.0.1:9119/nagios/ will work correctly :S
 * Vagrantfile is configured to perform full deploy from ansible play
 * Stress test - bash script which uses nc and curl to generate correct and incorrect requests.
-
-NEXT
-* Write instruction
-* create one tarball and upload somewhere.
-* send
+* Instructions - done
 
 ## Deadline for submission: 13.12.2016
 

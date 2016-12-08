@@ -4,35 +4,43 @@
 
 # configuration
 
+# host and port configuration
 HOST="127.0.0.1"
 PORT="1337"
+# output files
 PF="./ping.out"
 CF="./conn.out"
 EF="./err.out"
-NOT="0"
+# curl options 
 OPT="--fail --silent --show-error"
 
 # functions
 
 function how {
 echo "
+  #############################################################################################
   This bash script will connect to application running on configured host and port
-  and based on chosen options perform conenctions.
-  Dependencies: netcat (nc) and curl should be installed and accessible from PATH
-  
-  If executed without options, will executes 10000 error and successfull connections
+  and based on chosen options perform connections.
 
-  After execution with option -E -P -C You should provide number, how many connections You want.
+  Dependencies: netcat (nc) and curl should be installed and accessible from PATH.
+  
+  If executed without options, will executes 10000 error and successfull connections.
+
+  After execution with option -E -P -C will ask for number -  how many connections You want.
+
 	0 - Infinite connections every 0.3 seconds
 	1-.. Connections count
 
   Options:
-	-E - will generate error messages in applciation log files by sending incorrect request (two logfiles will be updated: access.log and err.log)
+
+	-E - will generate error messages in applciation log files by sending incorrect request 
+             (two logfiles will be updated: access.log and err.log)
 	-P - will ping server, request will be seen only in ping.log
 	-C - will generate correct GET request to application
+	-h - show this
 "
 }
-
+# this function will send incorrect http request and generate error message in app error log
 function doerr {
 	if [ "$HM" -ge 1 ];
 	then
@@ -48,7 +56,7 @@ function doerr {
 		done
 	fi
 }
-
+# this function will send ping, and application will reply with pong
 function doping {
  	if [ "$HM" -ge 1 ];
 	then 
@@ -65,6 +73,7 @@ function doping {
 	fi
 }
 
+# this function will execute curl to conf host:port with options (options are needed to prevent curl from output, even it is redirected)
 function docurl {
 	if [ "$HM" -ge 1 ];
         then
@@ -81,6 +90,7 @@ function docurl {
 	fi	
 }
 
+# this just reads how many requests need to be sent
 function startz {
 	echo "How many connections:"
 	read HM
@@ -93,17 +103,17 @@ do
 	case $option in
 	E)	echo "########## Incorrect connections #########"
 		startz
-		doerr>$EF
+		doerr>$EF 2>&1
 		;;
 
 	P)	echo "########## Ping application ##############"
 		startz
-		doping>$PF
+		doping>$PF 2>&1
 		;;
 
 	C)	echo "########## Correct HTTP requests #########"
 		startz
-		docurl>$CF
+		docurl>$CF 2>&1
 		;;
 
 	h)	how
@@ -111,7 +121,7 @@ do
 		exit 0
 		;;
 
-	*)      echo "No such option"
+	*)      echo "########## No such option #################"
 		how
 		HM=0
 		exit 1
@@ -119,11 +129,11 @@ do
 	esac
 done
 
-# Check is executed without options
+# Check if executed without options
 if [ -z "$HM" ]
 then
    HM=10000
-   echo "Doing $HM incorrect & correct requests"
-   doerr > /dev/null & docurl > /dev/null
+   echo "Doing $HM incorrect & $HM correct requests"
+   doerr > /dev/null 2>&1 & docurl > /dev/null 2>&1
 fi
 

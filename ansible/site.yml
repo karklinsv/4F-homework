@@ -2,7 +2,11 @@
 - hosts: nwa
 
   roles:
+  # Install all dependencies needed
   - deps
+  # Install Nagios from source files
   - nagios
+  # Copy and run application
   - application
+  # Install and configure nginx reverse proxy
   - nginx
