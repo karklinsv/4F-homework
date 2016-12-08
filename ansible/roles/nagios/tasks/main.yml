@@ -98,6 +98,14 @@
       owner=nagios
       group=nagios 
 
+- name: copy check_mem plugin
+  copy:
+      src=roles/nagios/files/check_mem
+      dest=/usr/local/nagios/libexec/
+      owner=nagios
+      group=nagios
+      mode=0755
+
 - name: Add nrpe server to autostart
   shell: echo "/usr/local/nagios/bin/nrpe -c /usr/local/nagios/etc/nrpe.cfg -d" >> /etc/rc.local
 
