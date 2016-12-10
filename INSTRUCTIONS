@@ -1,37 +1,39 @@
 * After vagrant up, everything is set automatically, and takes ~5-10 minutes depending on network speed 
   (dependencies installation is done via yum repos, everything else takes slightly less time)
 
-* Project was tested on RHEL7.2 and Fedora22
+* Project was tested on RHEL7.2, RHEL7.3 and Fedora22
   Ansible 2.2.0.0
   Vagrant 1.9.0
 
 * To run stress test:
 
- from same directory where script is located execute:
+ cd to testapp/ and execute:
  ./doconn.sh
  that will send 20000 requests to 127.0.0.1:1337
  
- Detailed descritption is available in README file. Usage is available by executing ./doconn.sh -h
+ Detailed description is available in ./testapp/README.md file. Usage is available by executing ./doconn.sh -h
 
 
 * Monitoring system:
 
- Nagios is running on: 127.0.0.1:9119/nagios/  (Please note, last "/" is necessary, I have tried multiple solutions to get rid of it, but currently unsuccessfully)
- https:// is used, but automatical redirect is working is You access http://
+ Nagios is running on: https://127.0.0.1:9119/nagios (self signed cert is used)
+ https:// is used, but if You access http:// request will be redirected to https://
 
  Credentials:
+
 	nagiosadmin
 	horsie123
 
- Only one host is monitored, 3  metrics are used besides regular OS monitors:
+ One host is monitored, 3  metrics are used besides regular OS monitors:
+
 	1. "More than 50 error messages in application log" - is monitoring /opt/application/err.log and if found more than 50 error messages, will provide critical alarm
 	2. "Way too many connections" - is monitoring /opt/application/conn.log and triggers an warning if there are more than 100 connection lines in last few minutes
 	3. "No new connections" - checking that no new lines appear in /opt/application/conn.log and triggers warning. 
 
- NB: check_logfile plugin is used, and it is set in a way, that if after check situation is changed (ie no new error messages, alarm will disapear)
+ NB: check_logfile plugin is used, and it is set in a default way, if after check situation is changed (ie no new error messages, alarm will disapear)
 
 * Vagrant project:
 
- Consist of Vagrantfile and centos7.box file (CentOS7 Minimal)
+ Consist of Vagrantfile and centos7_vk.box file (CentOS7 Minimal)
  Also includes Ansible project, which is executed on vagrant up (set up monitoring, application, httpd and nginx, all dependencies)
 

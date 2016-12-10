@@ -2,8 +2,8 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "centos7"
-  config.vm.box_url = "centos7.box"
+  config.vm.box = "centos7_vk"
+  config.vm.box_url = "centos7_vk.box"
   config.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true
   config.vm.hostname = "nwa"
 #  config.vm.network "private_network", ip: "172.28.128.153"

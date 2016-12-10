@@ -10,6 +10,8 @@ Status:
 * Vagrantfile is configured to perform full deploy from ansible play
 * Stress test - bash script which uses nc and curl to generate correct and incorrect requests.
 * Instructions - done
+* fixed also last trailing slash issue in monitoring url
+* some small changes in instruction
 
 ## Deadline for submission: 13.12.2016
 

@@ -109,6 +109,9 @@
 - name: Add nrpe server to autostart
   shell: echo "/usr/local/nagios/bin/nrpe -c /usr/local/nagios/etc/nrpe.cfg -d" >> /etc/rc.local
 
+- name: Ensure rc.local is executed on boot
+  file: path=/etc/rc.d/rc.local mode=0755 state=file
+
 - name: Start nrpe server
   shell: /usr/local/nagios/bin/nrpe -c /usr/local/nagios/etc/nrpe.cfg -d
 
