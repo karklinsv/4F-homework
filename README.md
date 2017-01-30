@@ -1,4 +1,4 @@
-## Home work
+
 Status:
 
 * Vagrant box created (CentOS 7), maybe some tuning still needed, but looks like working fine.
@@ -13,11 +13,9 @@ Status:
 * fixed also last trailing slash issue in monitoring url
 * some small changes in instruction
 
-## Deadline for submission: 13.12.2016
 
 ## Summary:
-
-Set up an environment on a Vagrant box VM containing:
+environment on a Vagrant box VM containing:
  * monitoring system 
  * web server 
  * simple application. 
@@ -44,46 +42,6 @@ Monitor one application parameter triggering an alert when this parameter exceed
 
  Create a stress test for the application that would change the reported metric value when the test is launched.
 
-## Deliverables:
 
-*Plain text file with short and sane instructions of: 
 
-a. how to run stress test 
-
-b. how to access monitoring system - url, credentials, etc
-
-*Vagrant project: 
-
-a. should contain a working configuration, so that a simple "vagrant up" can be used to set up the project 
-
-b. should contain all configuration management code that is required to set up environment 
-
-c. should contain all the necessary extra files (if any)
-
-## Technical requirements:
-
-Use Linux distribution of your choice, but install minimal version of it
-
-Use Puppet, Chef, Ansible or Salt as a configuration management tool
-
-Use configuration management tool locally as for standalone host (without pulling configuration from server/master/etc)
-
-Use Zabbix, Ganglia, Nagios or similar tool for monitoring
-
-Monitoring system should only visually show alert in dashboard, no other action required.
-
-All documentation, comments, etc should be written in English
-
-#What gets evaluated
-Tasks realisation according to the instructions and requirements
-
-Configuration management tool usage
-
-Code clarity and structure
-
-Modern practices, standards and conventions observance
-
-Documentation clarity
-
-Project setup esasines
 
